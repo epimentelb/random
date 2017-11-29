@@ -1,46 +1,46 @@
-- id: btceur
+- id: btcpen
   code: 3
-  #name: BTC/EUR      # default name
+  #name: BTC/PEN      # default name
   base_unit: btc
-  quote_unit: eur
+  quote_unit: pen
   #price_group_fixed: 1 # aggregate price levels in orderbook
-  bid: {fee: 0, currency: eur, fixed: 2}
-  ask: {fee: 0, currency: btc, fixed: 4}
+  bid: {fee: 0.002, currency: pen, fixed: 2}
+  ask: {fee: 0.002, currency: btc, fixed: 4}
   sort_order: 1
   #visible: false     # default to true
-- id: ltceur
+- id: ltcpen
   code: 4
   base_unit: ltc
-  quote_unit: eur
-  bid: {fee: 0, currency: eur, fixed: 8}
+  quote_unit: pen
+  bid: {fee: 0, currency: pen, fixed: 8}
   ask: {fee: 0, currency: ltc, fixed: 8}
-- id: bcceur
+- id: bccpen
   code: 5
   base_unit: bcc
-  quote_unit: eur
-  bid: {fee: 0, currency: eur, fixed: 8}
+  quote_unit: pen
+  bid: {fee: 0, currency: pen, fixed: 8}
   ask: {fee: 0, currency: bcc, fixed: 8}
-- id: etheur
+- id: ethpen
   code: 6
   base_unit: eth
-  quote_unit: eur
-  bid: {fee: 0, currency: eur, fixed: 8}
+  quote_unit: pen
+  bid: {fee: 0, currency: pen, fixed: 8}
   ask: {fee: 0, currency: eth, fixed: 8}
-- id: zeceur
+- id: zecpen
   code: 7
   base_unit: zec
-  quote_unit: eur
-  bid: {fee: 0, currency: eur, fixed: 8}
+  quote_unit: pen
+  bid: {fee: 0, currency: pen, fixed: 8}
   ask: {fee: 0, currency: zec, fixed: 8}
-- id: btseur
+- id: btspen
   code: 8
   base_unit: bts
-  quote_unit: eur
-  bid: {fee: 0, currency: eur, fixed: 8}
+  quote_unit: pen
+  bid: {fee: 0, currency: pen, fixed: 8}
   ask: {fee: 0, currency: bts, fixed: 8}
-- id: etceur
+- id: etcpen
   code: 9
   base_unit: etc
-  quote_unit: eur
-  bid: {fee: 0, currency: eur, fixed: 8}
+  quote_unit: pen
+  bid: {fee: 0, currency: pen, fixed: 8}
   ask: {fee: 0, currency: etc, fixed: 8}

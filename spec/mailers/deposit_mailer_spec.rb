@@ -11,7 +11,7 @@ describe DepositMailer do
     }
 
     it { expect(mail).not_to be_nil }
-    it { expect(mail.subject).to match "Your deposit has been credited into your account" }
+    it { expect(mail.subject).to match "Su deposito ya fue acreditado en su cuenta" }
   end
 
 end

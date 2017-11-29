@@ -6,7 +6,7 @@ describe MemberMailer do
     let(:mail) { MemberMailer.notify_signin(member.id) }
 
     it "renders the headers" do
-      mail.subject.should eq("[CoinxPro] You have just signed in")
+      mail.subject.should eq("[Latinbit] Iniciaste sesion en nuestra exchange")
       mail.to.should eq([member.email])
       mail.from.should eq([ENV['SYSTEM_MAIL_FROM']])
     end

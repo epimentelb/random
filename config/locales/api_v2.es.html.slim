@@ -1,0 +1,201 @@
+.jumbotron
+  h2 API versión 2
+  small Path prefix: /api/v2
+  br
+  small Response format: JSON
+
+.panel.panel-default
+  .panel-heading
+    h3 API pública / privada
+
+  .panel-body
+    p Latinbit API v2 incluye API pública y API privada.
+
+  table.table
+    thead
+      tr
+        th API pública
+        th API privada
+    tbody
+      tr
+        td No se requiere autenticación
+        td Autenticacion requerida
+      tr
+        td Ilimitado
+        td 6000 solicitudes / par de claves / 5 minutos, puede ponerse en contacto con Latinbit si necesita mayor información.
+      tr
+        td Listo para usar
+        td Necesita primero solicitar su clave secreta
+
+.panel.panel-default
+  .panel-heading
+    h3 Autenticación
+
+  .panel-body
+    p Para usar API privada, primero debe obtener su clave de acceso secreta. Después de registrarse y verificar, visite la <a href='/api_tokens'> página Tokens API </a> para obtener sus claves.
+    p Toda API privada requiere 3 parámetros de autenticación o más parámetros específicos de API. Los 3 parámetros de autenticación son:
+    table.table
+      tr
+        td llave de acceso
+        td Tu clave de acceso
+      tr
+        td tonce
+        td tonce es una indicación de fecha y hora, significa milisegundos transcurridos desde <a href='http://en.wikipedia.org/wiki/Unix_epoch'> Unix epoch </a>. Tonce debe estar dentro de los 30 segundos de la hora actual del servidor. Cada tonce puede solo ser usado una vez.
+      tr
+        td Firma
+        td Firma de la solicitud API, generada por usted, use su clave secreta.
+
+    p La firma es un hash de la solicitud (en forma de cadena canónica):
+    pre: código
+      | hash = HMAC-SHA256(payload, secret_key).to_hex
+
+    p El contenido es una combinación de verbo HTTP, uri y cadena de consulta:
+    pre: código
+      | # canonical_verb is HTTP verb like GET/POST in upcase.
+        # canonical_uri is request path like /api/v2/markets.
+        # canonical_query is the request query sorted in alphabetica order, including access_key and tonce, e.g. access_key=xxx&foo=bar&tonce=123456789
+        # The combined string looks like: GET|/api/v2/markets|access_key=xxx&foo=bar&tonce=123456789
+        def payload
+          "\#{canonical_verb}|\#{canonical_uri}|\#{canonical_query}"
+        end
+
+    p Nota: los parámetros de consulta se ordenan por contenidos, por lo que debe ser "access_key = xxx y foo = bar", no "foo = bar && access_key = xxx".
+    p Supongamos que mi clave secreta es 'yyy', entonces el resultado de HMAC-SHA256 del contenido anterior es:
+    pre: code
+      | hash = HMAC-SHA256('GET|/api/v2/markets|access_key=xxx&foo=bar&tonce=123456789', 'yyy').to_hex
+             = 'e324059be4491ed8e528aa7b8735af1e96547fbec96db962d51feb7bf1b64dee'
+
+    p Ahora tenemos una solicitud firmada que se puede usar así:
+    pre: code
+      | curl -X GET 'http://Latinbit.pe'
+
+.panel.panel-default
+  .panel-heading
+    h3 Formato de respuesta
+
+  .panel-body
+    p El código de estado HTTP correspondiente se usará en la respuesta de API. Latinbit también devolverá una estructura JSON que incluye los detalles del error en la solicitud fallida, por ejemplo:
+    pre: code
+      | {"error":{"code":1001,"message":"market does not have a valid value"}}
+    p Todos los errores siguen el formato del mensaje anterior, solo se diferencia en código y mensaje. El código es un código de error definido por Latinbit, indica la categoría del error, el mensaje es entendible para el ser humano.
+
+  .panel-body
+    p Latinbit devuelve la respuesta HTTP 200, con los datos solicitados en formato JSON.
+    table.table.result
+      thead
+        tr
+          th Tipo de datos
+          th Ejemplo
+          th Comentarios
+      tbody
+        tr
+          td Mercado
+          td: pre: Codigo
+            | {"at":1398410899, "ticker":{"buy":"3000.0","sell":"3100.0","low":"3000.0","high":"3000.0","last":"3000.0","vol":"0.11"}}
+          td
+            p at: Una marca de tiempo en segundos de Epoch
+            p buy/sell: Precio actual de compra / venta
+            p low/high: Precio más bajo / más alto en las últimas 24 horas
+            p last: Ultimo precio
+            p vol: Volumen comercial en las últimas 24 horas
+        tr
+          td Miembro
+          td: pre: código
+            | {"sn":"PEA5TFFOGQHTIO","name":"foo","email":"foo@peatio.dev","activated":true,"accounts":[{"currency":"eur","balance":"100243840.0","locked":"0.0"},{"currency":"btc","balance":"99999708.26","locked":"210.8"}]}
+          td
+            p sn: Identificador único del usuario
+            p name: Nombre de usuario
+            p email: Correo electrónico del usuario
+            p activated: El usuario está activado
+            p accounts: Información de cuentas del usuario, ver Cuenta
+        tr
+          td Account
+          td: pre: código
+            | {"currency":"eur","balance":"100243840.0","locked":"0.0"}
+          td
+            p currency: Tipo de cuenta, como 'btc' o 'eur'
+            p balance: Saldo de cuenta, excluir fondos bloqueados
+            p locked: fondos bloqueados
+        tr
+          td Order
+          td: pre: código
+            | {"id":7,"side":"sell","price":"3100.0","avg_price":"3101.2","state":"wait","market":"btceur","created_at":"2014-04-18T02:02:33Z","volume":"100.0","remaining_volume":"89.8","executed_volume":"10.2","trades":[{"id":2,"price":"3100.0","volume":"10.2","market":"btceur","created_at":"2014-04-18T02:04:49Z","side":"sell"}]}
+          td
+            p id: ID único de pedido
+            p side: Compra venta
+            p price: Precio del pedido
+            p avg_price: Precio promedio de ejecución
+            p state: espera, hecho o cancelado 'esperar' representa que el pedido está activo, puede ser un pedido nuevo o un pedido completo parcial; 'hecho' significa que el orden se ha cumplido por completo; 'cancelar' significa que la orden ha sido cancelada.
+            p market: A qué mercado pertenece el pedido
+            p created_at: Tiempo de orden creado
+            p volume: volumen para comprar / vender
+            p remaining_volume: remaining_volume siempre es menor o igual que el volumen
+            p executed_volume: volume = remaining_volume + executed_volume
+            p trades: el historial de las ordenes de trading, ver trading. Nota: no todos los pedidos incluyen intercambios, solo los datos de pedidos detallados devueltos por cierta API lo harán.
+        tr
+          td Trade
+          td: pre: código
+            | {"id":2,"price":"3100.0","volume":"10.2","market":"btceur","created_at":"2014-04-18T02:04:49Z","side":"sell"}
+          td
+            p id: Identificación única
+            p price: Precio comercio
+            p volume: volumen comercial
+            p market: Mercado de trading, como 'btceur'
+            p created_at: tiempo de intercambio
+        tr
+          td OrderBook
+          td: pre: código
+            | {"asks": [...],"bids": [...]}
+          td
+            p OrderBook muestra pedidos en el mercado.
+
+.panel.panel-default
+  .panel-heading
+    h3 Algunos ejemplos
+
+  .panel-body
+    p Compre 1BTC al precio 4000EUR:
+    pre: código
+
+
+    p Crear pedidos múltiples con una sola solicitud:
+    pre: code
+
+
+.panel.panel-default
+  .panel-heading
+    h3 Consejos / Advertencias
+
+  .panel-body
+    table.table
+      thead
+        tr
+          th API
+          th Detalles
+      tbody
+        tr
+          td POST /api/v2/orden/eliminar
+          td Cancelar una orden es una operación asincrónica. Una respuesta exitosa solo significa que su solicitud de cancelación ha sido aceptada, no significa que la orden ha sido cancelada. Siempre debe usar / api / v2 / order o websocket api para obtener el último estado del pedido.
+        tr
+          td POST /api/v2/pedidos/claro
+          td Cancelar todos sus pedidos es una operación asincrónica. Una respuesta exitosa solo significa que su solicitud ha sido aceptada. Los pedidos en respuesta pueden o no haberse cancelado aún.
+
+.panel.panel-default
+  .panel-heading
+    h3 Bibliotecas/Herramientas
+
+  .panel-body
+    ul
+      li: h4
+        a href='http://latinbit.pe'
+ 
+
+.panel.panel-default
+  .panel-heading
+    h3 API List
+
+  .panel-body
+    p Todas las API se enumeran a continuación con detalles. Aquellos requieren access_key / tonce / signature.
+
+.row
+  #swagger-ui-container.swagger-ui-wrap

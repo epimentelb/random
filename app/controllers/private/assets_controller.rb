@@ -3,7 +3,7 @@ module Private
     skip_before_action :auth_member!, only: [:index]
 
     def index
-      # @cny_assets  = Currency.assets('cny')
+      @pen_assets  = Currency.assets('pen')
 #      @cny_assets  = Currency.assets('usd')
       @eur_assets  = Currency.assets('eur')
       @btc_proof   = Proof.current :btc
@@ -24,7 +24,7 @@ module Private
         @blk_account = current_user.accounts.with_currency(:blk).first
         @rpt_account = current_user.accounts.with_currency(:rpt).first
         @trt_account = current_user.accounts.with_currency(:trt).first
-        # @cny_account = current_user.accounts.with_currency(:cny).first
+        @pen_account = current_user.accounts.with_currency(:pen).first
         @cny_account = current_user.accounts.with_currency(:usd).first
         @cny_account = current_user.accounts.with_currency(:cny).first
         @eur_account = current_user.accounts.with_currency(:eur).first
