@@ -35,9 +35,10 @@ read -p "Press [Enter] key to continue..."
 #wget http://localhost:15672/cli/rabbitmqadmin
 #chmod +x rabbitmqadmin
 #sudo mv rabbitmqadmin /usr/local/sbin
-#sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu trusty universe'
-#sudo apt-get update
+sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu trusty universe'
+sudo apt-get update
 #sudo apt-get install -y mysql-server-5.6 redis-server libmysqlclient-dev
+sudo apt-get install -y redis-server libmysqlclient-dev
 sudo apt-get install -y dirmngr gnupg
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
 sudo apt-get install -y apt-transport-https ca-certificates
