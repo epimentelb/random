@@ -82,8 +82,8 @@ sudo nano ~/peatio/current/config/currencies.yml
 dialog --msgbox "Ingresa la ip del demonio :q to save" 10 20
 sudo nano ~/peatio/current/config/amqp.yml
 cd ~/peatio/current/
-sudo /etc/init.d/mysql stop
-sudo /etc/init.d/mysql start
+#sudo /etc/init.d/mysql stop
+#sudo /etc/init.d/mysql start
 bundle exec rake db:setup
 bundle exec rake assets:precompile
 pwd
