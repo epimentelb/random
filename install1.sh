@@ -79,6 +79,8 @@ dialog --msgbox "enter database password  in settings and save" 10 20
 sudo nano ~/peatio/current/config/database.yml
 dialog --msgbox "enter bitcoind user password settings and :q to save" 10 20
 sudo nano ~/peatio/current/config/currencies.yml
+dialog --msgbox "Ingresa la ip del demonio :q to save" 10 20
+sudo nano ~/peatio/current/config/amqp.yml
 cd ~/peatio/current/
 sudo /etc/init.d/mysql stop
 sudo /etc/init.d/mysql start
