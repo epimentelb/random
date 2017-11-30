@@ -2,10 +2,12 @@ development: &defaults
   adapter: mysql2
   encoding: utf8
   database: peatio_development
-  username: root
+  username: 
   password:
+  host:
   pool: 10
   reconnect: true
+
 
 test:
   <<: *defaults
