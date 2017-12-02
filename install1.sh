@@ -6,9 +6,9 @@ wget https://gist.githubusercontent.com/scatterp2/5aab2adb578020f93d0f2146e0aac6
 sudo apt-get remove -y apache2
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 sudo apt-get install -y git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev imagemagick gsfonts nodejs nginx-extras redis-server software-properties-common python-software-properties nano dialog vim
-#sudo add-apt-repository -y ppa:bitcoin/bitcoin
-#sudo apt-get update
-#sudo apt-get install -y bitcoind
+sudo add-apt-repository -y ppa:bitcoin/bitcoin
+sudo apt-get update
+sudo apt-get install -y bitcoind
 cd
 git clone git://github.com/sstephenson/rbenv.git .rbenv
 echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
@@ -22,23 +22,22 @@ echo "gem: --no-ri --no-rdoc" > ~/.gemrc
 gem install bundler
 rbenv rehash
 read -p "Press [Enter] key to continue..."
-#mkdir -p ~/.bitcoin
-#cp bitcoin.conf ~/.bitcoin/bitcoin.conf
-#dialog --msgbox "enter bitcoind user password settings and save" 10 20
-#sudo nano ~/.bitcoin/bitcoin.conf
-#echo 'deb http://www.rabbitmq.com/debian/ testing main' | sudo tee /etc/apt/sources.list.d/rabbitmq.list
-#wget -O- https://www.rabbitmq.com/rabbitmq-release-signing-key.asc |sudo apt-key add -
-#sudo apt-get update
-#sudo apt-get install -y rabbitmq-server
-#sudo rabbitmq-plugins enable rabbitmq_management
-#sudo service rabbitmq-server restart
-#wget http://localhost:15672/cli/rabbitmqadmin
-#chmod +x rabbitmqadmin
-#sudo mv rabbitmqadmin /usr/local/sbin
+mkdir -p ~/.bitcoin
+cp bitcoin.conf ~/.bitcoin/bitcoin.conf
+dialog --msgbox "enter bitcoind user password settings and save" 10 20
+sudo nano ~/.bitcoin/bitcoin.conf
+echo 'deb http://www.rabbitmq.com/debian/ testing main' | sudo tee /etc/apt/sources.list.d/rabbitmq.list
+wget -O- https://www.rabbitmq.com/rabbitmq-release-signing-key.asc |sudo apt-key add -
+sudo apt-get update
+sudo apt-get install -y rabbitmq-server
+sudo rabbitmq-plugins enable rabbitmq_management
+sudo service rabbitmq-server restart
+wget http://localhost:15672/cli/rabbitmqadmin
+chmod +x rabbitmqadmin
+sudo mv rabbitmqadmin /usr/local/sbin
 sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu trusty universe'
 sudo apt-get update
-#sudo apt-get install -y mysql-server-5.6 redis-server libmysqlclient-dev
-sudo apt-get install -y redis-server libmysqlclient-dev
+sudo apt-get install -y mysql-server-5.6 redis-server libmysqlclient-dev
 sudo apt-get install -y dirmngr gnupg
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
 sudo apt-get install -y apt-transport-https ca-certificates
@@ -75,10 +74,9 @@ dialog --msgbox "enter database password  in settings and save" 10 20
 sudo nano ~/peatio/current/config/database.yml
 dialog --msgbox "enter bitcoind user password settings and :q to save" 10 20
 sudo nano ~/peatio/current/config/currencies.yml
-sudo nano ~/peatio/current/config/amqp.yml
 cd ~/peatio/current/
-#sudo /etc/init.d/mysql stop
-#sudo /etc/init.d/mysql start
+sudo /etc/init.d/mysql stop
+sudo /etc/init.d/mysql start
 bundle exec rake db:setup
 bundle exec rake assets:precompile
 pwd
@@ -99,7 +97,7 @@ sudo apt-get install -y python-certbot-nginx
 sudo service nginx stop
 sudo service nginx start
 bundle exec rake daemons:start
-sudo service nginx status
+#sudo service nginx status
 bundle exec rake daemons:status
 mv pc ..
-#echo "you can now setup ssl optionally start bitcoind if you have over 2gb or visit the website (its up and running)"
+echo "you can now setup ssl optionally start bitcoind if you have over 2gb or visit the website (its up and running)"
